@@ -39,15 +39,18 @@
             previewButton = new Button();
             label3 = new Label();
             fpsCombobox = new ComboBox();
-            timer = new System.Windows.Forms.Timer(components);
-            preview = new System.Windows.Forms.Timer(components);
             label4 = new Label();
-            comboBox1 = new ComboBox();
+            boundariesCombobox = new ComboBox();
             label5 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             comboBox2 = new ComboBox();
             comboBox3 = new ComboBox();
             label6 = new Label();
+            label7 = new Label();
+            progressBar1 = new ProgressBar();
+            openConfigButton = new Button();
+            timer = new System.Windows.Forms.Timer(components);
+            preview = new System.Windows.Forms.Timer(components);
             mainLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)deck1picturebox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)deck2picturebox).BeginInit();
@@ -85,7 +88,7 @@
             button1.TabIndex = 0;
             button1.Text = "C O N N E C T   A N D   T R A N S M I T";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            button1.Click += transmit_Click;
             // 
             // label1
             // 
@@ -129,10 +132,13 @@
             tableLayoutPanel1.Controls.Add(label3, 0, 2);
             tableLayoutPanel1.Controls.Add(fpsCombobox, 0, 3);
             tableLayoutPanel1.Controls.Add(label4, 1, 0);
-            tableLayoutPanel1.Controls.Add(comboBox1, 1, 1);
+            tableLayoutPanel1.Controls.Add(boundariesCombobox, 1, 1);
             tableLayoutPanel1.Controls.Add(label5, 1, 2);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 3);
             tableLayoutPanel1.Controls.Add(label6, 2, 0);
+            tableLayoutPanel1.Controls.Add(label7, 2, 2);
+            tableLayoutPanel1.Controls.Add(progressBar1, 2, 3);
+            tableLayoutPanel1.Controls.Add(openConfigButton, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 143);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -190,17 +196,6 @@
             fpsCombobox.TabIndex = 3;
             fpsCombobox.SelectedIndexChanged += fpsCombobox_SelectedIndexChanged;
             // 
-            // timer
-            // 
-            timer.Enabled = true;
-            timer.Interval = 1000;
-            timer.Tick += timer_Tick;
-            // 
-            // preview
-            // 
-            preview.Interval = 50;
-            preview.Tick += preview_Tick;
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -210,15 +205,15 @@
             label4.TabIndex = 4;
             label4.Text = "Boundaries:";
             // 
-            // comboBox1
+            // boundariesCombobox
             // 
-            comboBox1.Dock = DockStyle.Fill;
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(305, 23);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(296, 23);
-            comboBox1.TabIndex = 5;
+            boundariesCombobox.Dock = DockStyle.Fill;
+            boundariesCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+            boundariesCombobox.FormattingEnabled = true;
+            boundariesCombobox.Location = new Point(305, 23);
+            boundariesCombobox.Name = "boundariesCombobox";
+            boundariesCombobox.Size = new Size(296, 23);
+            boundariesCombobox.TabIndex = 5;
             // 
             // label5
             // 
@@ -270,6 +265,45 @@
             label6.Size = new Size(0, 15);
             label6.TabIndex = 8;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(607, 60);
+            label7.Name = "label7";
+            label7.Size = new Size(72, 15);
+            label7.TabIndex = 9;
+            label7.Text = "Connection:";
+            // 
+            // progressBar1
+            // 
+            progressBar1.Dock = DockStyle.Fill;
+            progressBar1.Location = new Point(607, 83);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(297, 34);
+            progressBar1.TabIndex = 10;
+            // 
+            // openConfigButton
+            // 
+            openConfigButton.Dock = DockStyle.Fill;
+            openConfigButton.Location = new Point(607, 23);
+            openConfigButton.Name = "openConfigButton";
+            openConfigButton.Size = new Size(297, 34);
+            openConfigButton.TabIndex = 11;
+            openConfigButton.Text = "Open (create) Config";
+            openConfigButton.UseVisualStyleBackColor = true;
+            openConfigButton.Click += openConfigButton_Click;
+            // 
+            // timer
+            // 
+            timer.Enabled = true;
+            timer.Interval = 1000;
+            timer.Tick += timer_Tick;
+            // 
+            // preview
+            // 
+            preview.Interval = 50;
+            preview.Tick += preview_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -308,11 +342,14 @@
         private Label label3;
         private ComboBox fpsCombobox;
         private Label label4;
-        private ComboBox comboBox1;
+        private ComboBox boundariesCombobox;
         private Label label5;
         private TableLayoutPanel tableLayoutPanel2;
         private ComboBox comboBox2;
         private ComboBox comboBox3;
         private Label label6;
+        private Label label7;
+        private ProgressBar progressBar1;
+        private Button openConfigButton;
     }
 }
