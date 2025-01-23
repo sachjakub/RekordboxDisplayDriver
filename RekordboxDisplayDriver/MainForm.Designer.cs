@@ -69,22 +69,24 @@
             mainLayout.Controls.Add(tableLayoutPanel1, 0, 2);
             mainLayout.Dock = DockStyle.Fill;
             mainLayout.Location = new Point(0, 0);
+            mainLayout.Margin = new Padding(5, 6, 5, 6);
             mainLayout.Name = "mainLayout";
             mainLayout.RowCount = 5;
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            mainLayout.Size = new Size(913, 329);
+            mainLayout.Size = new Size(1565, 658);
             mainLayout.TabIndex = 0;
             // 
             // button1
             // 
             button1.Dock = DockStyle.Fill;
-            button1.Location = new Point(3, 272);
+            button1.Location = new Point(5, 544);
+            button1.Margin = new Padding(5, 6, 5, 6);
             button1.Name = "button1";
-            button1.Size = new Size(907, 34);
+            button1.Size = new Size(1555, 68);
             button1.TabIndex = 0;
             button1.Text = "C O N N E C T   A N D   T R A N S M I T";
             button1.UseVisualStyleBackColor = true;
@@ -93,9 +95,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(3, 309);
+            label1.Location = new Point(5, 618);
+            label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(45, 15);
+            label1.Size = new Size(80, 30);
             label1.TabIndex = 1;
             label1.Text = "Status: ";
             // 
@@ -103,9 +106,10 @@
             // 
             deck1picturebox.BackColor = Color.White;
             deck1picturebox.Dock = DockStyle.Fill;
-            deck1picturebox.Location = new Point(3, 3);
+            deck1picturebox.Location = new Point(5, 6);
+            deck1picturebox.Margin = new Padding(5, 6, 5, 6);
             deck1picturebox.Name = "deck1picturebox";
-            deck1picturebox.Size = new Size(907, 64);
+            deck1picturebox.Size = new Size(1555, 128);
             deck1picturebox.SizeMode = PictureBoxSizeMode.StretchImage;
             deck1picturebox.TabIndex = 2;
             deck1picturebox.TabStop = false;
@@ -114,9 +118,10 @@
             // 
             deck2picturebox.BackColor = Color.White;
             deck2picturebox.Dock = DockStyle.Fill;
-            deck2picturebox.Location = new Point(3, 73);
+            deck2picturebox.Location = new Point(5, 146);
+            deck2picturebox.Margin = new Padding(5, 6, 5, 6);
             deck2picturebox.Name = "deck2picturebox";
-            deck2picturebox.Size = new Size(907, 64);
+            deck2picturebox.Size = new Size(1555, 128);
             deck2picturebox.SizeMode = PictureBoxSizeMode.StretchImage;
             deck2picturebox.TabIndex = 3;
             deck2picturebox.TabStop = false;
@@ -140,34 +145,37 @@
             tableLayoutPanel1.Controls.Add(progressBar1, 2, 3);
             tableLayoutPanel1.Controls.Add(openConfigButton, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(3, 143);
+            tableLayoutPanel1.Location = new Point(5, 286);
+            tableLayoutPanel1.Margin = new Padding(5, 6, 5, 6);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(907, 123);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.Size = new Size(1555, 246);
             tableLayoutPanel1.TabIndex = 4;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(3, 0);
+            label2.Location = new Point(5, 0);
+            label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(51, 15);
+            label2.Size = new Size(89, 30);
             label2.TabIndex = 0;
             label2.Text = "Preview:";
             // 
             // previewButton
             // 
             previewButton.Dock = DockStyle.Fill;
-            previewButton.Location = new Point(3, 23);
+            previewButton.Location = new Point(5, 46);
+            previewButton.Margin = new Padding(5, 6, 5, 6);
             previewButton.Name = "previewButton";
-            previewButton.Size = new Size(296, 34);
+            previewButton.Size = new Size(508, 68);
             previewButton.TabIndex = 1;
             previewButton.Text = "Turn on";
             previewButton.UseVisualStyleBackColor = true;
@@ -176,9 +184,10 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(3, 60);
+            label3.Location = new Point(5, 120);
+            label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(29, 15);
+            label3.Size = new Size(51, 30);
             label3.TabIndex = 2;
             label3.Text = "FPS:";
             label3.Click += label3_Click;
@@ -189,19 +198,21 @@
             fpsCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             fpsCombobox.FormattingEnabled = true;
             fpsCombobox.Items.AddRange(new object[] { "1", "5", "15", "30", "60" });
-            fpsCombobox.Location = new Point(3, 83);
+            fpsCombobox.Location = new Point(5, 166);
+            fpsCombobox.Margin = new Padding(5, 6, 5, 6);
             fpsCombobox.MaxDropDownItems = 6;
             fpsCombobox.Name = "fpsCombobox";
-            fpsCombobox.Size = new Size(296, 23);
+            fpsCombobox.Size = new Size(508, 38);
             fpsCombobox.TabIndex = 3;
             fpsCombobox.SelectedIndexChanged += fpsCombobox_SelectedIndexChanged;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(305, 0);
+            label4.Location = new Point(523, 0);
+            label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
-            label4.Size = new Size(69, 15);
+            label4.Size = new Size(121, 30);
             label4.TabIndex = 4;
             label4.Text = "Boundaries:";
             // 
@@ -210,17 +221,21 @@
             boundariesCombobox.Dock = DockStyle.Fill;
             boundariesCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
             boundariesCombobox.FormattingEnabled = true;
-            boundariesCombobox.Location = new Point(305, 23);
+            boundariesCombobox.Location = new Point(523, 46);
+            boundariesCombobox.Margin = new Padding(5, 6, 5, 6);
             boundariesCombobox.Name = "boundariesCombobox";
-            boundariesCombobox.Size = new Size(296, 23);
+            boundariesCombobox.Size = new Size(508, 38);
             boundariesCombobox.TabIndex = 5;
+            boundariesCombobox.SelectedIndexChanged += boundariesCombobox_SelectedIndexChanged;
+            boundariesCombobox.MouseClick += boundariesCombobox_MouseClick;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(305, 60);
+            label5.Location = new Point(523, 120);
+            label5.Margin = new Padding(5, 0, 5, 0);
             label5.Name = "label5";
-            label5.Size = new Size(112, 15);
+            label5.Size = new Size(197, 30);
             label5.TabIndex = 6;
             label5.Text = "Display ( left - right)";
             // 
@@ -232,62 +247,69 @@
             tableLayoutPanel2.Controls.Add(comboBox2, 0, 0);
             tableLayoutPanel2.Controls.Add(comboBox3, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(305, 83);
+            tableLayoutPanel2.Location = new Point(523, 166);
+            tableLayoutPanel2.Margin = new Padding(5, 6, 5, 6);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(296, 34);
+            tableLayoutPanel2.Size = new Size(508, 68);
             tableLayoutPanel2.TabIndex = 7;
             // 
             // comboBox2
             // 
             comboBox2.Dock = DockStyle.Fill;
             comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(3, 3);
+            comboBox2.Location = new Point(5, 6);
+            comboBox2.Margin = new Padding(5, 6, 5, 6);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(142, 23);
+            comboBox2.Size = new Size(244, 38);
             comboBox2.TabIndex = 0;
             // 
             // comboBox3
             // 
             comboBox3.Dock = DockStyle.Fill;
             comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new Point(151, 3);
+            comboBox3.Location = new Point(259, 6);
+            comboBox3.Margin = new Padding(5, 6, 5, 6);
             comboBox3.Name = "comboBox3";
-            comboBox3.Size = new Size(142, 23);
+            comboBox3.Size = new Size(244, 38);
             comboBox3.TabIndex = 1;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(607, 0);
+            label6.Location = new Point(1041, 0);
+            label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
-            label6.Size = new Size(0, 15);
+            label6.Size = new Size(0, 30);
             label6.TabIndex = 8;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(607, 60);
+            label7.Location = new Point(1041, 120);
+            label7.Margin = new Padding(5, 0, 5, 0);
             label7.Name = "label7";
-            label7.Size = new Size(72, 15);
+            label7.Size = new Size(124, 30);
             label7.TabIndex = 9;
             label7.Text = "Connection:";
             // 
             // progressBar1
             // 
             progressBar1.Dock = DockStyle.Fill;
-            progressBar1.Location = new Point(607, 83);
+            progressBar1.Location = new Point(1041, 166);
+            progressBar1.Margin = new Padding(5, 6, 5, 6);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(297, 34);
+            progressBar1.Size = new Size(509, 68);
             progressBar1.TabIndex = 10;
             // 
             // openConfigButton
             // 
             openConfigButton.Dock = DockStyle.Fill;
-            openConfigButton.Location = new Point(607, 23);
+            openConfigButton.Location = new Point(1041, 46);
+            openConfigButton.Margin = new Padding(5, 6, 5, 6);
             openConfigButton.Name = "openConfigButton";
-            openConfigButton.Size = new Size(297, 34);
+            openConfigButton.Size = new Size(509, 68);
             openConfigButton.TabIndex = 11;
             openConfigButton.Text = "Open (create) Config";
             openConfigButton.UseVisualStyleBackColor = true;
@@ -306,12 +328,12 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(913, 329);
+            ClientSize = new Size(1565, 658);
             Controls.Add(mainLayout);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(2);
+            Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;

@@ -13,13 +13,20 @@ namespace RekordboxDisplayDriver
         private int _fps;
         private bool _isReady;
         private bool _transmitting;
+        private bool _isLoadedConfig;
+
+        private int _deck1Start;
+        private int _deck1Height;
+        private int _deck2Start;
+        private int _deck2Height;
+
+        private List<string> configs;
         public Transmiter transmiter { get; set; }
         public ConfigHandler configHandler { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
-
             SetEntities();
         }
 
@@ -27,14 +34,35 @@ namespace RekordboxDisplayDriver
         {
             configHandler = new ConfigHandler();
 
-            _deck1capturer = new Capturer(80, 70);
-            _deck2capturer = new Capturer(151, 70);
+            _isLoadedConfig = false;
+            SetBoundariesComboBox();
+
+            _deck1Start = configHandler.GetDeck1Start(configs[0]);
+            _deck1Height = configHandler.GetDeck1Height(configs[0]);
+            _deck2Start = configHandler.GetDeck2Start(configs[0]);
+            _deck2Height = configHandler.GetDeck2Height(configs[0]);
+
+            _deck1capturer = new Capturer(_deck1Start, _deck1Height);
+            _deck2capturer = new Capturer(_deck2Start, _deck2Height);
+
             _previewing = false;
             _status = string.Empty;
             _isReady = false;
             _transmitting = false;
+
             _fps = 30;
-            boundariesCombobox.DataSource = configHandler.LoadConfig();
+        }
+
+        private void SetBoundariesComboBox()
+        {
+            try { 
+                configs = configHandler.LoadConfig();
+                boundariesCombobox.DataSource = configs;
+                _isLoadedConfig = true;
+            }
+            catch (Exception){
+                _isLoadedConfig = false;
+            }
         }
 
         private void SetStatus()
@@ -49,6 +77,11 @@ namespace RekordboxDisplayDriver
             else if (boundariesCombobox.SelectedItem == null)
             {
                 _status = "Please select a boundaries";
+                _isReady = false;
+            }
+            else if (!_isLoadedConfig)
+            {
+                _status = "Loading config failed";
                 _isReady = false;
             }//elseif na displaye
             else
@@ -79,8 +112,16 @@ namespace RekordboxDisplayDriver
                 deck2picturebox.Image = null;
             }
 
-            deck1picturebox.Image = _deck1capturer.Capture();
-            deck2picturebox.Image = _deck2capturer.Capture();
+            try
+            {
+                deck1picturebox.Image = _deck1capturer.Capture();
+                deck2picturebox.Image = _deck2capturer.Capture();
+            }
+            catch (Exception ex)
+            {
+                previewButton_Click(null, null);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -160,6 +201,30 @@ namespace RekordboxDisplayDriver
         private void openConfigButton_Click(object sender, EventArgs e)
         {
             configHandler.OpenConfig();
+        }
+
+        private void boundariesCombobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_deck1capturer == null || _deck2capturer == null)
+            {
+                // Handle the null case appropriately
+                return;
+            }
+
+            string currentConfig = boundariesCombobox.SelectedValue.ToString();
+
+            _deck1capturer.ChangeCaptureBoundaries(
+                configHandler.GetDeck1Start(currentConfig),
+                configHandler.GetDeck1Height(currentConfig));
+
+            _deck2capturer.ChangeCaptureBoundaries(
+                configHandler.GetDeck2Start(currentConfig),
+                configHandler.GetDeck2Height(currentConfig));
+        }
+
+        private void boundariesCombobox_MouseClick(object sender, MouseEventArgs e)
+        {
+            SetBoundariesComboBox();
         }
     }
 }

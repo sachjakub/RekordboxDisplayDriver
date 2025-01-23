@@ -42,5 +42,25 @@ namespace RekordboxDisplayDriver.Entities
             var lines = File.ReadAllLines(configFilePath).ToList();
             return lines.Skip(2).ToList();
         }
+
+        public int GetDeck1Start(string config)
+        {
+            return int.Parse(config.Split(';')[1]);
+        }
+
+        public int GetDeck1Height(string config)
+        {
+            return int.Parse(config.Split(';')[2]);
+        }
+
+        public int GetDeck2Start(string config)
+        {
+            return int.Parse(config.Split(';')[3]);
+        }
+
+        public int GetDeck2Height(string config)
+        {
+            return int.Parse(config.Split(';')[4]);
+        }
     }
 }

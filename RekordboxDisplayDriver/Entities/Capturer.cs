@@ -100,5 +100,11 @@ namespace RekordboxDisplayDriver.Entities
             ReleaseDC(windowHandle, hWndDC);
             return bitmap;
         }
+
+        public void ChangeCaptureBoundaries(int start, int height)
+        {
+            _startHeight = start;
+            _captureHeight = height;
+        }
     }
 }
