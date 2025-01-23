@@ -71,7 +71,7 @@ namespace RekordboxDisplayDriver
 
             if (fpsCombobox.SelectedItem == null)
             {
-                _status = "Please select a FPS";
+                _status = "Please select a framerate";
                 _isReady = false;
             }
             else if (boundariesCombobox.SelectedItem == null)
@@ -96,6 +96,7 @@ namespace RekordboxDisplayDriver
             }
 
             label1.Text = "Status: " + _status;
+            SetTransmitButton();
         }
 
         private void UpdateDecks()
@@ -122,6 +123,14 @@ namespace RekordboxDisplayDriver
                 previewButton_Click(null, null);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void SetTransmitButton()
+        {
+            button1.BackColor = _isReady ? Color.LightGreen : Color.LightYellow;
+            
+            if (_transmitting )
+                button1.BackColor = Color.IndianRed;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -169,7 +178,7 @@ namespace RekordboxDisplayDriver
                 _transmitting = false;
                 transmiter = null;
                 progressBar1.Value = 0;
-                button1.Text = "C O N N E C T  A N D  T R A N S M I T";
+                button1.Text = "CONNECT";
             }
             else
             {
@@ -179,7 +188,7 @@ namespace RekordboxDisplayDriver
                     await Task.Delay(1100);
                     if (_isReady)
                     {
-                        button1.Text = "D I S C O N N E C T";
+                        button1.Text = "DISCONNECT";
                         transmiter = new Transmiter();
                         //start transmitting
                         _transmitting = true;
