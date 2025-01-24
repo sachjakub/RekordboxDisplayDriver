@@ -1,5 +1,6 @@
 using RekordboxDisplayDriver.Entities;
 using System.Diagnostics;
+
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RekordboxDisplayDriver
@@ -20,9 +21,13 @@ namespace RekordboxDisplayDriver
         private int _deck2Start;
         private int _deck2Height;
 
-        private List<string> configs;
-        public Transmiter transmiter { get; set; }
-        public ConfigHandler configHandler { get; set; }
+        private Bitmap _deck1Bitmap;
+        private Bitmap _deck2Bitmap;
+
+        private List<string> _configs;
+        private Transmiter _transmiterL;
+        public Transmiter _transmiterR;
+        public ConfigHandler _configHandler;
 
         public MainForm()
         {
@@ -32,15 +37,18 @@ namespace RekordboxDisplayDriver
 
         private void SetEntities()
         {
-            configHandler = new ConfigHandler();
+            _configHandler = new ConfigHandler();
+            _transmiterL = new Transmiter();
+            _transmiterR = new Transmiter();
 
             _isLoadedConfig = false;
             SetBoundariesComboBox();
+            SetPortsComboBoxes();
 
-            _deck1Start = configHandler.GetDeck1Start(configs[0]);
-            _deck1Height = configHandler.GetDeck1Height(configs[0]);
-            _deck2Start = configHandler.GetDeck2Start(configs[0]);
-            _deck2Height = configHandler.GetDeck2Height(configs[0]);
+            _deck1Start = _configHandler.GetDeck1Start(_configs[0]);
+            _deck1Height = _configHandler.GetDeck1Height(_configs[0]);
+            _deck2Start = _configHandler.GetDeck2Start(_configs[0]);
+            _deck2Height = _configHandler.GetDeck2Height(_configs[0]);
 
             _deck1capturer = new Capturer(_deck1Start, _deck1Height);
             _deck2capturer = new Capturer(_deck2Start, _deck2Height);
@@ -50,18 +58,34 @@ namespace RekordboxDisplayDriver
             _isReady = false;
             _transmitting = false;
 
-            _fps = 30;
+            _fps = 0;
         }
 
         private void SetBoundariesComboBox()
         {
-            try { 
-                configs = configHandler.LoadConfig();
-                boundariesCombobox.DataSource = configs;
+            try
+            {
+                _configs = _configHandler.LoadConfig();
+                boundariesCombobox.DataSource = _configs;
                 _isLoadedConfig = true;
             }
-            catch (Exception){
+            catch (Exception)
+            {
                 _isLoadedConfig = false;
+            }
+        }
+
+        private void SetPortsComboBoxes()
+        {
+            try
+            {
+                comboBox2.DataSource = _transmiterL.GetAvailablePorts();
+                comboBox3.DataSource = _transmiterR.GetAvailablePorts();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No available connections have been found. Please try again later.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
             }
         }
 
@@ -83,7 +107,12 @@ namespace RekordboxDisplayDriver
             {
                 _status = "Loading config failed";
                 _isReady = false;
-            }//elseif na displaye
+            }
+            else if (comboBox2.SelectedItem == null /*|| comboBox3.SelectedItem == null*/)
+            {
+                _status = "Please select a ports";
+                _isReady = false;
+            }
             else
             {
                 _status = "Ready";
@@ -100,6 +129,33 @@ namespace RekordboxDisplayDriver
         }
 
         private void UpdateDecks()
+        {
+
+            if (_deck1Bitmap != null)
+            {
+                _deck1Bitmap.Dispose();
+                _deck1Bitmap = null;
+            }
+
+            if (_deck2Bitmap != null)
+            {
+                _deck2Bitmap.Dispose();
+                _deck2Bitmap = null;
+            }
+
+            try
+            {
+                _deck1Bitmap = _deck1capturer.Capture();
+                _deck2Bitmap = _deck2capturer.Capture();
+            }
+            catch (Exception ex)
+            {
+                transmit_Click(null, null);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateDecksPreview()
         {
             if (deck1picturebox.Image != null)
             {
@@ -128,8 +184,8 @@ namespace RekordboxDisplayDriver
         private void SetTransmitButton()
         {
             button1.BackColor = _isReady ? Color.LightGreen : Color.LightYellow;
-            
-            if (_transmitting )
+
+            if (_transmitting)
                 button1.BackColor = Color.IndianRed;
         }
 
@@ -145,11 +201,17 @@ namespace RekordboxDisplayDriver
 
         private void preview_Tick(object sender, EventArgs e)
         {
-            UpdateDecks();
+            UpdateDecksPreview();
         }
 
         private void previewButton_Click(object sender, EventArgs e)
         {
+            if (_fps == 0)
+            {
+                MessageBox.Show("Please select a framerate", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (_previewing)
             {
                 previewButton.Text = "Start Preview";
@@ -176,7 +238,9 @@ namespace RekordboxDisplayDriver
             if (_transmitting)
             {
                 _transmitting = false;
-                transmiter = null;
+                comboBox2.Enabled = true;
+                comboBox3.Enabled = true;
+                transmitT.Enabled = false;
                 progressBar1.Value = 0;
                 button1.Text = "CONNECT";
             }
@@ -185,13 +249,41 @@ namespace RekordboxDisplayDriver
                 if (_isReady)
                 {
                     progressBar1.Value = 100;
-                    await Task.Delay(1100);
+                    await Task.Delay(2000);
+
                     if (_isReady)
                     {
+                        comboBox2.Enabled = false;
+                        comboBox3.Enabled = false;
                         button1.Text = "DISCONNECT";
-                        transmiter = new Transmiter();
-                        //start transmitting
-                        _transmitting = true;
+
+                        try
+                        {
+
+                            _transmitting = true;
+
+                            _transmiterL.SetTransmiter(comboBox2.SelectedItem!.ToString()!, 2000000);
+                            _transmiterL.Open();
+
+                            //_transmiterR.SetTransmiter(comboBox3.SelectedItem!.ToString()!, 2000000);
+                            //_transmiterR.Open();
+
+                            transmitT.Enabled = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            _transmiterL.Close();
+                            _transmiterR.Close();
+                            _transmitting = false;
+                            comboBox2.Enabled = true;
+                            comboBox3.Enabled = true;
+                            transmitT.Enabled = false;
+                            progressBar1.Value = 0;
+                            button1.Text = "CONNECT";
+                        }
+
+
                     }
                 }
                 else
@@ -205,11 +297,12 @@ namespace RekordboxDisplayDriver
         {
             _fps = int.Parse(fpsCombobox.SelectedItem!.ToString()!);
             preview.Interval = 1000 / _fps;
+            transmitT.Interval = 1000 / _fps;
         }
 
         private void openConfigButton_Click(object sender, EventArgs e)
         {
-            configHandler.OpenConfig();
+            _configHandler.OpenConfig();
         }
 
         private void boundariesCombobox_SelectedIndexChanged(object sender, EventArgs e)
@@ -223,17 +316,43 @@ namespace RekordboxDisplayDriver
             string currentConfig = boundariesCombobox.SelectedValue.ToString();
 
             _deck1capturer.ChangeCaptureBoundaries(
-                configHandler.GetDeck1Start(currentConfig),
-                configHandler.GetDeck1Height(currentConfig));
+                _configHandler.GetDeck1Start(currentConfig),
+                _configHandler.GetDeck1Height(currentConfig));
 
             _deck2capturer.ChangeCaptureBoundaries(
-                configHandler.GetDeck2Start(currentConfig),
-                configHandler.GetDeck2Height(currentConfig));
+                _configHandler.GetDeck2Start(currentConfig),
+                _configHandler.GetDeck2Height(currentConfig));
         }
 
         private void boundariesCombobox_MouseClick(object sender, MouseEventArgs e)
         {
             SetBoundariesComboBox();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _transmiterL.Close();
+        }
+
+        private async void transmitT_Tick(object sender, EventArgs e)
+        {
+            UpdateDecks();
+
+            try
+            {
+                await Task.Run(() => _transmiterL.SendBitmap(_deck1Bitmap));
+                //await Task.Run(() => _transmiterR.SendBitmap(_deck1Bitmap));
+            }
+            catch (Exception ex)
+            {
+                transmit_Click(null, null);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _transmiterR.Close();
         }
     }
 }

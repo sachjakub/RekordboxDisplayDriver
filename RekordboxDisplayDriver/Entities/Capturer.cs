@@ -75,7 +75,7 @@ namespace RekordboxDisplayDriver.Entities
             IntPtr hWndDC = GetWindowDC(windowHandle);
             if (hWndDC == IntPtr.Zero)
             {
-                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+                throw new Exception("Rekordbox is most likely minimalized");
             }
 
             Bitmap bitmap = new Bitmap(windowWidth, captureHeight, PixelFormat.Format32bppArgb);
