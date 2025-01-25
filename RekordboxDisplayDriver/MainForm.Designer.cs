@@ -51,7 +51,6 @@
             openConfigButton = new Button();
             timer = new System.Windows.Forms.Timer(components);
             preview = new System.Windows.Forms.Timer(components);
-            transmitT = new System.Windows.Forms.Timer(components);
             mainLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)deck1picturebox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)deck2picturebox).BeginInit();
@@ -180,7 +179,6 @@
             label3.Size = new Size(29, 15);
             label3.TabIndex = 2;
             label3.Text = "FPS:";
-            label3.Click += label3_Click;
             // 
             // fpsCombobox
             // 
@@ -308,10 +306,6 @@
             preview.Interval = 50;
             preview.Tick += preview_Tick;
             // 
-            // transmitT
-            // 
-            transmitT.Tick += transmitT_Tick;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -324,7 +318,6 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "RekordboxDisplayDriver";
-            Load += MainForm_Load;
             mainLayout.ResumeLayout(false);
             mainLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)deck1picturebox).EndInit();
@@ -359,6 +352,5 @@
         private Label label7;
         private ProgressBar progressBar1;
         private Button openConfigButton;
-        private System.Windows.Forms.Timer transmitT;
     }
 }

@@ -53,9 +53,7 @@ namespace RekordboxDisplayDriver.Entities
         public void SendBitmap(Bitmap bitmap)
         {
             if (bitmap == null)
-            {
                 return;
-            }
 
             if (_serialPort.IsOpen)
             {
@@ -66,7 +64,8 @@ namespace RekordboxDisplayDriver.Entities
                         bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                         byte[] bitmapBytes = ms.ToArray();
 
-                        _serialPort.Write(bitmapBytes, 0, bitmapBytes.Length);
+                        //_serialPort.Write(bitmapBytes, 0, bitmapBytes.Length);
+                        _serialPort.Write(new byte[] { 0x00 }, 0, 1);
                     }
                 }
                 catch (Exception ex)

@@ -1,7 +1,6 @@
 using RekordboxDisplayDriver.Entities;
-using System.Diagnostics;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Timers;
+using System.Threading.Tasks;
 
 namespace RekordboxDisplayDriver
 {
@@ -21,13 +20,12 @@ namespace RekordboxDisplayDriver
         private int _deck2Start;
         private int _deck2Height;
 
-        private Bitmap _deck1Bitmap;
-        private Bitmap _deck2Bitmap;
-
         private List<string> _configs;
         private Transmiter _transmiterL;
         public Transmiter _transmiterR;
         public ConfigHandler _configHandler;
+
+        private System.Timers.Timer _updateDecksTimer;
 
         public MainForm()
         {
@@ -128,30 +126,17 @@ namespace RekordboxDisplayDriver
             SetTransmitButton();
         }
 
-        private void UpdateDecks()
+        private async Task UpdateDecks()
         {
-
-            if (_deck1Bitmap != null)
-            {
-                _deck1Bitmap.Dispose();
-                _deck1Bitmap = null;
-            }
-
-            if (_deck2Bitmap != null)
-            {
-                _deck2Bitmap.Dispose();
-                _deck2Bitmap = null;
-            }
-
             try
             {
-                _deck1Bitmap = _deck1capturer.Capture();
-                _deck2Bitmap = _deck2capturer.Capture();
+                await Task.Run(() => _transmiterL.SendBitmap(_deck1capturer.Capture()));
+                //await Task.Run(() => _transmiterR.SendBitmap(_deck2capturer.Capture()));
             }
             catch (Exception ex)
             {
                 transmit_Click(null, null);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Disconnected due to minimalizing the rekordbox", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -162,7 +147,6 @@ namespace RekordboxDisplayDriver
                 deck1picturebox.Image.Dispose();
                 deck1picturebox.Image = null;
             }
-
             if (deck2picturebox.Image != null)
             {
                 deck2picturebox.Image.Dispose();
@@ -179,6 +163,8 @@ namespace RekordboxDisplayDriver
                 previewButton_Click(null, null);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            GC.Collect();
         }
 
         private void SetTransmitButton()
@@ -187,11 +173,6 @@ namespace RekordboxDisplayDriver
 
             if (_transmitting)
                 button1.BackColor = Color.IndianRed;
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -227,12 +208,6 @@ namespace RekordboxDisplayDriver
                 preview.Enabled = true;
             }
         }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private async void transmit_Click(object sender, EventArgs e)
         {
             if (_transmitting)
@@ -240,7 +215,9 @@ namespace RekordboxDisplayDriver
                 _transmitting = false;
                 comboBox2.Enabled = true;
                 comboBox3.Enabled = true;
-                transmitT.Enabled = false;
+                _updateDecksTimer?.Stop();
+                _updateDecksTimer?.Dispose();
+
                 progressBar1.Value = 0;
                 button1.Text = "CONNECT";
             }
@@ -268,7 +245,10 @@ namespace RekordboxDisplayDriver
                             //_transmiterR.SetTransmiter(comboBox3.SelectedItem!.ToString()!, 2000000);
                             //_transmiterR.Open();
 
-                            transmitT.Enabled = true;
+                            _updateDecksTimer = new System.Timers.Timer(1000.0 / _fps);
+                            _updateDecksTimer.Elapsed += async (sender, args) => await UpdateDecks();
+                            _updateDecksTimer.AutoReset = true;
+                            _updateDecksTimer.Start();
                         }
                         catch (Exception ex)
                         {
@@ -278,7 +258,9 @@ namespace RekordboxDisplayDriver
                             _transmitting = false;
                             comboBox2.Enabled = true;
                             comboBox3.Enabled = true;
-                            transmitT.Enabled = false;
+                            _updateDecksTimer?.Stop();
+                            _updateDecksTimer?.Dispose();
+
                             progressBar1.Value = 0;
                             button1.Text = "CONNECT";
                         }
@@ -297,7 +279,6 @@ namespace RekordboxDisplayDriver
         {
             _fps = int.Parse(fpsCombobox.SelectedItem!.ToString()!);
             preview.Interval = 1000 / _fps;
-            transmitT.Interval = 1000 / _fps;
         }
 
         private void openConfigButton_Click(object sender, EventArgs e)
@@ -308,10 +289,7 @@ namespace RekordboxDisplayDriver
         private void boundariesCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_deck1capturer == null || _deck2capturer == null)
-            {
-                // Handle the null case appropriately
                 return;
-            }
 
             string currentConfig = boundariesCombobox.SelectedValue.ToString();
 
@@ -332,22 +310,6 @@ namespace RekordboxDisplayDriver
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             _transmiterL.Close();
-        }
-
-        private async void transmitT_Tick(object sender, EventArgs e)
-        {
-            UpdateDecks();
-
-            try
-            {
-                await Task.Run(() => _transmiterL.SendBitmap(_deck1Bitmap));
-                //await Task.Run(() => _transmiterR.SendBitmap(_deck1Bitmap));
-            }
-            catch (Exception ex)
-            {
-                transmit_Click(null, null);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
